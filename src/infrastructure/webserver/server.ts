@@ -20,6 +20,9 @@ import { updatePalletHandler } from '../../interfaces/controllers/updatePallet.c
 import { palletDistribucionSelectByIdHandler } from '../../interfaces/controllers/palletDistribucionSelectById.controller';
 import { palletsDetalleDeleteByDistribucionIdHandler } from '../../interfaces/controllers/palletsDetalleDeleteByDistribucionId.controller';
 import { palletsDistribucionDeleteByIdHandler } from '../../interfaces/controllers/palletsDistribucionDeleteById.controller';
+import { palletDistribucionUpdateTemperaturaHandler } from '../../interfaces/controllers/palletDistribucionUpdateTemperatura.handler';
+import { podEmbarqueInsertHandler } from '../../interfaces/controllers/podEmbarqueInsertController';
+import { podLiberoEmbarqueSelectHandler } from '../../interfaces/controllers/podLiberoEmbarqueSelect.controller';
 
 
 export const createServer = () => {
@@ -55,6 +58,11 @@ export const createServer = () => {
   app.get("/pallets/distribucion/:id", palletDistribucionSelectByIdHandler);
   app.delete("/palletsDetalle/distribucion/:id", palletsDetalleDeleteByDistribucionIdHandler);
   app.delete("/palletsDistribucion/:id/:IdPallet", palletsDistribucionDeleteByIdHandler);
+  app.put("/palletdistribucion/temperatura", palletDistribucionUpdateTemperaturaHandler);
+
+
+  app.post("/pod/embarque", podEmbarqueInsertHandler);
+  app.get("/pod/libero-embarque", podLiberoEmbarqueSelectHandler);
 
 
 
