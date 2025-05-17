@@ -17,6 +17,8 @@ import { PalletPCKSelectRepositoryImpl } from '../../infrastructure/db/mssql/pal
 import { PalletPCKSelectService } from '../../application/services/palletPCKSelect.service';
 import { UpdatePalletRepositoryImpl } from '../../infrastructure/db/mssql/updatePalletRepositoryImpl';
 import { UpdatePalletService } from '../../application/services/updatePallet.service';
+import { MovControlPalletsUpdateFacturadoRepositoryImpl } from '../../infrastructure/db/mssql/movControlPalletsUpdateFacturado.repository.impl';
+import { MovControlPalletsUpdateFacturadoService } from '../../application/services/movControlPalletsUpdateFacturado.service';
 
 const PalletDetailInsertRepositoryImplRepo = new PalletDetailInsertRepositoryImpl();
 const palletDetailInsertServicew = new palletDetailInsertService(PalletDetailInsertRepositoryImplRepo);
@@ -43,17 +45,13 @@ const palletPCKSelectService = new PalletPCKSelectService(PalletPCKSelectReposit
 const UpdatePalletRepositoryImplrepository = new UpdatePalletRepositoryImpl();
 const updatePalletService = new UpdatePalletService(UpdatePalletRepositoryImplrepository);
 
+
+const MovControlPalletsUpdateFacturadoRepositoryImplrepo = new MovControlPalletsUpdateFacturadoRepositoryImpl();
+const movControlPalletsUpdateFacturadoService = new MovControlPalletsUpdateFacturadoService(MovControlPalletsUpdateFacturadoRepositoryImplrepo);
+
 export const palletDetailInsertHandler = async (req: Request, res: Response) => {
   try {
-   console.log('====================================');
-    console.log('entro');
-    console.log('====================================');
     const { IdPallet, IdNoPallet }: palletDetailInsert = req.body;
-
-     console.log('====================================');
-    console.log(IdPallet, IdNoPallet);
-    console.log('====================================');
-
     const result = await getPalletDetailsByIdNoPalletService.execute(IdNoPallet);
 
     if (!result || result.length === 0) {
@@ -119,12 +117,13 @@ export const palletDetailInsertHandler = async (req: Request, res: Response) => 
             FechaPropuesta: fecha.toISOString()
           }
           await palletDistribucionInsertService.execute(datapalletDistribucion);
+          await movControlPalletsUpdateFacturadoService.execute(IdNoPallet, 1)
     } else {
       const maxNumeroPallet = Math.max(...obtenerPalletDistribucion.map(p => Number(p.NumeroPallet)));
       const datapalletDistribucion={
             IdPalletDistribucion: lastPalletDistribution,
             IdPallet: IdPallet,
-            Identificador: `PALLET ${maxNumeroPallet > 10 ? '' : '0'}${maxNumeroPallet + 1}`,
+            Identificador: `PALLET ${(maxNumeroPallet + 1).toString().padStart(2, '0')}`,
             NumeroPallet: maxNumeroPallet + 1,
             Cajas: totalCajas,
             Kilogramos: totalKilogramos,
@@ -134,6 +133,7 @@ export const palletDetailInsertHandler = async (req: Request, res: Response) => 
             FechaPropuesta: fecha.toISOString()
           }
           await palletDistribucionInsertService.execute(datapalletDistribucion);
+          await movControlPalletsUpdateFacturadoService.execute(IdNoPallet, 1)
     }
     if (obtenerPalletDistribucion.length === 0) {
       const palletPCKSelect = await palletPCKSelectService.execute(IdPallet);

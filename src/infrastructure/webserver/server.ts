@@ -23,6 +23,7 @@ import { palletsDistribucionDeleteByIdHandler } from '../../interfaces/controlle
 import { palletDistribucionUpdateTemperaturaHandler } from '../../interfaces/controllers/palletDistribucionUpdateTemperatura.handler';
 import { podEmbarqueInsertHandler } from '../../interfaces/controllers/podEmbarqueInsertController';
 import { podLiberoEmbarqueSelectHandler } from '../../interfaces/controllers/podLiberoEmbarqueSelect.controller';
+import { movControlPalletsUpdateFacturadoHandler } from '../../interfaces/controllers/movControlPalletsUpdateFacturado.controller';
 
 
 export const createServer = () => {
@@ -64,6 +65,8 @@ export const createServer = () => {
   app.post("/pod/embarque", podEmbarqueInsertHandler);
   app.get("/pod/libero-embarque", podLiberoEmbarqueSelectHandler);
 
+  
+  app.put("/control-pallets/update-facturado/:id", movControlPalletsUpdateFacturadoHandler);
 
 
   return app;
