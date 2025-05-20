@@ -1,0 +1,21 @@
+iniciar: npx pm2 start src/main.ts --interpreter node --interpreter-args "-r ts-node/register
+
+npx pm2 list  # Display all processes status
+npx pm2 monit # Monitor all processes
+
+
+npx pm2 reloadLogs # Reload all logs
+npx pm2 stop all   # Stop all processes
+npx pm2 restart all # Restart all processes
+
+npx pm2 reload all  # Will 0s downtime reload (for NETWORKED apps)
+
+npx pm2 stop 0   # Stop specific process id
+npx pm2 restart 0 # Restart specific process id
+
+npx pm2 delete 0 # Will remove process from pm2 list
+npx pm2 delete all # Will remove all processes from pm2 list
+
+
+
+npx pm2 reset <process> # Reset meta data (restarted time...)
