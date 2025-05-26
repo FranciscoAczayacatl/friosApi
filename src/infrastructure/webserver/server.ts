@@ -24,6 +24,8 @@ import { palletDistribucionUpdateTemperaturaHandler } from '../../interfaces/con
 import { podEmbarqueInsertHandler } from '../../interfaces/controllers/podEmbarqueInsertController';
 import { podLiberoEmbarqueSelectHandler } from '../../interfaces/controllers/podLiberoEmbarqueSelect.controller';
 import { movControlPalletsUpdateFacturadoHandler } from '../../interfaces/controllers/movControlPalletsUpdateFacturado.controller';
+import { movPalletsDetalleSearchHandler } from '../../interfaces/controllers/movPalletsDetalleSearch.controller';
+import { movControlPalletsDateSelectByIdHandler } from '../../interfaces/controllers/movControlPalletsDateSelectById.controller';
 
 
 export const createServer = () => {
@@ -67,7 +69,8 @@ export const createServer = () => {
 
   
   app.put("/control-pallets/update-facturado/:id", movControlPalletsUpdateFacturadoHandler);
-
+  app.get("/pallets-detalle/search", movPalletsDetalleSearchHandler);
+  app.get("/control-pallets/date/:id", movControlPalletsDateSelectByIdHandler);
 
   return app;
 };

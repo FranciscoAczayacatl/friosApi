@@ -19,6 +19,10 @@ import { UpdatePalletRepositoryImpl } from '../../infrastructure/db/mssql/update
 import { UpdatePalletService } from '../../application/services/updatePallet.service';
 import { MovControlPalletsUpdateFacturadoRepositoryImpl } from '../../infrastructure/db/mssql/movControlPalletsUpdateFacturado.repository.impl';
 import { MovControlPalletsUpdateFacturadoService } from '../../application/services/movControlPalletsUpdateFacturado.service';
+import { MovPalletsDetalleSearchRepositoryImpl } from '../../infrastructure/db/mssql/movPalletsDetalleSearch.repository.impl';
+import { MovPalletsDetalleSearchService } from '../../application/services/movPalletsDetalleSearch.service';
+import { MovControlPalletsDateSelectByIdRepositoryImpl } from '../../infrastructure/db/mssql/movControlPalletsDateSelectById.repository.impl';
+import { MovControlPalletsDateSelectByIdService } from '../../application/services/movControlPalletsDateSelectById.service';
 
 const PalletDetailInsertRepositoryImplRepo = new PalletDetailInsertRepositoryImpl();
 const palletDetailInsertServicew = new palletDetailInsertService(PalletDetailInsertRepositoryImplRepo);
@@ -49,9 +53,24 @@ const updatePalletService = new UpdatePalletService(UpdatePalletRepositoryImplre
 const MovControlPalletsUpdateFacturadoRepositoryImplrepo = new MovControlPalletsUpdateFacturadoRepositoryImpl();
 const movControlPalletsUpdateFacturadoService = new MovControlPalletsUpdateFacturadoService(MovControlPalletsUpdateFacturadoRepositoryImplrepo);
 
+const MovPalletsDetalleSearchRepositoryImplrepos = new MovPalletsDetalleSearchRepositoryImpl();
+const movPalletsDetalleSearchService = new MovPalletsDetalleSearchService(MovPalletsDetalleSearchRepositoryImplrepos);
+
+const MovControlPalletsDateSelectByIdRepositoryImplrepo = new MovControlPalletsDateSelectByIdRepositoryImpl();
+const movControlPalletsDateSelectByIdService = new MovControlPalletsDateSelectByIdService(MovControlPalletsDateSelectByIdRepositoryImplrepo);
+
 export const palletDetailInsertHandler = async (req: Request, res: Response) => {
   try {
     const { IdPallet, IdNoPallet }: palletDetailInsert = req.body;
+
+    const found = await movPalletsDetalleSearchService.execute(IdNoPallet, IdPallet);
+
+    if(found){
+      console.log('pallet duplicado');
+      res.status(302).json({ message: 'pallet duplicado'});
+      return 0
+    }
+
     const result = await getPalletDetailsByIdNoPalletService.execute(IdNoPallet);
 
     if (!result || result.length === 0) {
@@ -101,8 +120,28 @@ export const palletDetailInsertHandler = async (req: Request, res: Response) => 
 
     const obtenerPalletDistribucion = await obtenerPalletDistribucionService.execute(IdPallet);
     console.log(obtenerPalletDistribucion);
-    
 
+    let date = await movControlPalletsDateSelectByIdService.execute(IdNoPallet);
+    console.log('====================================');
+    console.log(date?.Fecha);
+    console.log('====================================');
+let sqlDateTime=''
+if (date?.Fecha) {
+  const originalDate = new Date(date.Fecha); // convertir string a Date
+
+  const zeroedDate = new Date(Date.UTC(
+    originalDate.getUTCFullYear(),
+    originalDate.getUTCMonth(),
+    originalDate.getUTCDate()
+  ));
+
+  const isoString = zeroedDate.toISOString(); // "2025-05-06T00:00:00.000Z"
+
+    sqlDateTime = isoString.slice(0, 19).replace('T', ' ');
+  console.log(sqlDateTime); // "2025-05-06 00:00:00"
+} else {
+  console.log('Fecha no disponible');
+}
     if (obtenerPalletDistribucion.length === 0) {
           const datapalletDistribucion={
             IdPalletDistribucion: lastPalletDistribution,
@@ -113,8 +152,8 @@ export const palletDetailInsertHandler = async (req: Request, res: Response) => 
             Kilogramos: totalKilogramos,
             Temperatura: 0.00,
             Termografo: 0,
-            FechaOriginal: fecha.toISOString(),
-            FechaPropuesta: fecha.toISOString()
+            FechaOriginal: sqlDateTime || fecha.toISOString(),
+            FechaPropuesta: sqlDateTime || fecha.toISOString()
           }
           await palletDistribucionInsertService.execute(datapalletDistribucion);
           await movControlPalletsUpdateFacturadoService.execute(IdNoPallet, 1)
@@ -129,8 +168,8 @@ export const palletDetailInsertHandler = async (req: Request, res: Response) => 
             Kilogramos: totalKilogramos,
             Temperatura: 0.00,
             Termografo: 0,
-            FechaOriginal: fecha.toISOString(),
-            FechaPropuesta: fecha.toISOString()
+            FechaOriginal: sqlDateTime || fecha.toISOString(),
+            FechaPropuesta: sqlDateTime || fecha.toISOString(),
           }
           await palletDistribucionInsertService.execute(datapalletDistribucion);
           await movControlPalletsUpdateFacturadoService.execute(IdNoPallet, 1)
