@@ -24,9 +24,12 @@ import { calidadHuertasPesoCalibreDeleteHandler } from '../interfaces/calidad/co
 import { calidadCalibresSelectHandler } from '../interfaces/calidad/controllers/calidadCalibresSelect.controller';
 import { calidadCategoriaSelectHandler } from '../interfaces/calidad/controllers/calidadCategoriaSelect.controller';
 import { calidadMarcasSelectHandler } from '../interfaces/calidad/controllers/calidadMarcasSelect.controller';
+import { calidadImagenInsertHandler } from '../interfaces/calidad/controllers/calidadImagenInsert.controller';
+import { imageEvidenceHandler } from '../interfaces/calidad/controllers/imageEvidenceController';
+import { calidadImagenesEvidenciaDeleteHandler } from '../interfaces/calidad/controllers/calidadImagenesEvidenciaDelete.controller';
 
 
-const router = Router()
+const router = Router();
 
 router.get('/lotes-abiertos', getLotesAbiertosHandler);
 router.get('/huertas/:IdUser', getCalidadHuertasDataHandler);
@@ -54,4 +57,7 @@ router.get('/calidad/calibres', calidadCalibresSelectHandler);
 router.get('/calidad/categorias', calidadCategoriaSelectHandler);
 router.get('/calidad/marcas', calidadMarcasSelectHandler);
 
+router.post('/calidad/imagenes', calidadImagenInsertHandler);
+router.get('/image-evidence/:id', imageEvidenceHandler);
+router.delete('/calidad/imagenes-evidencia/:id', calidadImagenesEvidenciaDeleteHandler);
 export default router;

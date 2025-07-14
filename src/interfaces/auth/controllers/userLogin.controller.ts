@@ -8,6 +8,9 @@ const service = new UserLoginService(repo);
 export const userLoginHandler = async (req: Request, res: Response) => {
   const { Usuario, Contraseña } = req.body;
 
+  console.log(req.body);
+  
+
   if (!Usuario || !Contraseña) {
     return res.status(400).json({ message: "Missing username or password" });
   }

@@ -103,7 +103,7 @@ export const getCalidadHuertasDataHandler = async (req: Request, res: Response) 
 
     }else{
       const result = await getLotesAbiertosService.execute();
-      const user= await userNameByIdService.execute(idUser)
+      const user = await userNameByIdService.execute(idUser)
       const userName = user?.Nombre ?? 'NULL';
       
       for (const element of result) {
