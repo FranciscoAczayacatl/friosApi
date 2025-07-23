@@ -49,6 +49,9 @@ export const getCalidadHuertasDataHandler = async (req: Request, res: Response) 
     const data = await service.execute();
     const idUser = parseInt(req.params.IdUser);
 
+    console.log('====================================');
+    console.log(req.params.IdUser);
+    console.log('====================================');
     const dbHuertasArr: CalidadHuertasData[] = []
     const dbTTSArr: LotesAbiertos[] = []
 
@@ -77,6 +80,16 @@ export const getCalidadHuertasDataHandler = async (req: Request, res: Response) 
         const userName = user?.Nombre ?? 'NULL';
           for (const element of difference) {
             const destino = await loteLineaProduccionSelectByIdService.execute(element.IdLote)
+            let destino1 = ''
+            if (destino.length === 0) {
+              destino1 =  "Revisar Api"
+            }else{
+              if (destino[0].LineaProduccion === 'NACIONAL') {
+                destino1 =  "NACIONAL"
+              }else{
+                destino1 =  "EXPORTACION"
+              }
+            }
           const lote = {
             IdLote: element.IdLote,
             Fecha: element.Fecha,
@@ -88,7 +101,7 @@ export const getCalidadHuertasDataHandler = async (req: Request, res: Response) 
             VelocidadCepillado: '',
             TipoCorte: '',
             EstadoFruta: '',
-            Destino: destino[0].LineaProduccion === 'NACIONAL' ? 'NACIONAL': "EXPORTACION",
+            Destino: destino1,
             Activo: 0,
             Creador: userName ,
             IdRangoPesos: fecha,

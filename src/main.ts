@@ -9,7 +9,9 @@ const port = process.env.PORT;
 
 
 const app = createServer();
-
+app.get('/api/test', (req, res) => {
+  res.send('API funcionando');
+});
 
 app.listen(port, () => {
   console.log('Servidor escuchando en http://localhost:3000');

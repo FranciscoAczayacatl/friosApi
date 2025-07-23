@@ -27,6 +27,7 @@ import { calidadMarcasSelectHandler } from '../interfaces/calidad/controllers/ca
 import { calidadImagenInsertHandler } from '../interfaces/calidad/controllers/calidadImagenInsert.controller';
 import { imageEvidenceHandler } from '../interfaces/calidad/controllers/imageEvidenceController';
 import { calidadImagenesEvidenciaDeleteHandler } from '../interfaces/calidad/controllers/calidadImagenesEvidenciaDelete.controller';
+import { calidadRangoPesosByIdHandler } from '../interfaces/calidad/controllers/calidadRangoPesosById.controller';
 
 
 const router = Router();
@@ -52,6 +53,7 @@ router.put('/calidad/porcentaje-danos/update', calidadPorcentajeGeneralDanosUpda
 router.get('/calidad/rango-pesos/hoy', calidadRangoPesosSelectTodayHandler);
 router.post('/calidad/rango-pesos', calidadRangoPesosInsertHandler);
 router.put('/calidad/rango-pesos/update', calidadRangoPesosUpdateHandler);
+router.get('/calidad/rango-pesos/:id', calidadRangoPesosByIdHandler);
 router.delete('/calidad/huertas/peso-calibre/:id', calidadHuertasPesoCalibreDeleteHandler);
 router.get('/calidad/calibres', calidadCalibresSelectHandler);
 router.get('/calidad/categorias', calidadCategoriaSelectHandler);

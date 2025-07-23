@@ -30,6 +30,11 @@ import { movControlPalletsDateSelectByIdHandler } from '../interfaces/frios/cont
 import { controlPalletsExistsByIdAndMesHandler } from '../interfaces/frios/controllers/controlPalletsExistsByIdAndMes.controller';
 
 const router = Router();
+  router.get('/test', ()=>{
+    console.log('====================================');
+    console.log('entro');
+    console.log('====================================');
+  })
 
   router.get('/pallets', obtenerPalletsHandler);// /pallets?mes=4&ejercicio=2025
   router.get('/pedido-detalle', GetdetailRequestHandler);// /pedido-detalle?idPedido=799
